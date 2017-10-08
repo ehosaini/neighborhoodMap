@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <title>Neighborhood</title>
 
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <!-- custom styling -->
     <link rel="stylesheet" href="style/custom.css" />
   </head>
@@ -19,24 +22,43 @@
 
     <div class="container-fluid">
       <div class="row justify-content-center h-100">
-        <div class="col col-3">
-          <ul>
-            <li>
-              Location 1
-            </li>
-            <li>
-              Location 1
-            </li>
-          </ul>
-        </div>
-        <div class="col col-9" id="map"></div>
+          <!-- search bar and locations list on the left side -->
+          <div class="col col-3">
+            <form class="form-inline">
+              <div class="form-group">
+                <input class="form-control" placeholder="Search below list"/>
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle fa fa-filter" aria-hidden="true" type="button" id="filterLocations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="filterLocations">
+                    <a class="dropdown-item" href="#">Location 1</a>
+                    <a class="dropdown-item" href="#">Location 2</a>
+                    <a class="dropdown-item" href="#">Location 3</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <ul class="list-group">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+            </ul>
+
+          </div>
+
+          <!-- Google map on the right side  -->
+          <div class="col col-9" id="map"></div>
+
+
       </div>
     </div>
 
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
-    <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <!-- script file and Google Js API -->
     <script src="js/script.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIZOOrwEvY10hGaO4WydV6Zdih7yBfWNk&callback=initMap" async defer></script>
 
