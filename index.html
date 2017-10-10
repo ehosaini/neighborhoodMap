@@ -17,7 +17,7 @@
   </head>
   <body>
     <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
-       <a class="navbar-brand" href="#">Neighborhood</a>
+       <a class="navbar-brand" href="#">Washington DC Locations</a>
     </nav>
 
     <div class="container-fluid">
@@ -30,18 +30,15 @@
                 <div class="dropdown">
                   <button class="btn btn-primary dropdown-toggle fa fa-filter" aria-hidden="true" type="button" id="filterLocations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   </button>
-                  <div class="dropdown-menu" aria-labelledby="filterLocations">
-                    <a class="dropdown-item" href="#">Location 1</a>
-                    <a class="dropdown-item" href="#">Location 2</a>
-                    <a class="dropdown-item" href="#">Location 3</a>
+                  <div class="dropdown-menu" aria-labelledby="filterLocations" data-bind="foreach: sites">
+                    <a class="dropdown-item" href="#" data-bind="text: name"></a>
                   </div>
                 </div>
               </div>
             </form>
 
-            <ul class="list-group">
-              <li class="list-group-item">Cras justo odio</li>
-              <li class="list-group-item">Dapibus ac facilisis in</li>
+            <ul class="list-group" data-bind="foreach: sites">
+              <li class="placesList list-group-item-action" data-bind="text: name"></li>
             </ul>
 
           </div>
@@ -57,9 +54,11 @@
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 
-    <!-- script file and Google Js API -->
+    <!-- script files and Google Js API -->
     <script src="js/script.js"></script>
+    <script src="js/mvvm.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIZOOrwEvY10hGaO4WydV6Zdih7yBfWNk&callback=initMap" async defer></script>
 
   </body>
