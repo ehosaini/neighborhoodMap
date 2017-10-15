@@ -26,12 +26,11 @@
           <div class="col col-3">
             <form class="form-inline">
               <div class="form-group">
-                <input class="form-control" placeholder="Search below list"/>
                 <div class="dropdown">
-                  <button class="btn btn-primary dropdown-toggle fa fa-filter" aria-hidden="true" type="button" id="filterLocations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button class="btn btn-primary dropdown-toggle fa fa-filter" aria-hidden="true" type="button" id="filterLocations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter
                   </button>
                   <div class="dropdown-menu" aria-labeledby="filterLocations" data-bind="foreach: sites">
-                    <a class="dropdown-item" href="#" data-bind="text: name"></a>
+                    <a class="dropdown-item" href="#" data-bind="text: name, click: $parent.zoomOnSite"></a>
                   </div>
                 </div>
               </div>
