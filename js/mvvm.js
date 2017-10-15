@@ -1,8 +1,7 @@
 
-
 // maps center on page load
 var mapCenter = {
-      center: {lat: 38.8896198, lng: -77.0229772},
+      center: {lat: 38.8718568, lng: -77.0562669},
       zoom: 13
   };
 
@@ -14,7 +13,7 @@ function Site(site){
   };
 
 // Knockout view model object
-function ViewModel(){
+function ViewModel(map){
   // populate the sites observableArray upon page load
     self = this;
     self.sites = ko.observableArray([]),
@@ -26,16 +25,15 @@ function ViewModel(){
       });//-- end of forEach
     };
 
-    // self.map = initMap();
-
+  // center the map on the location
+  // that user click on it's name on the list
     self.zoomOnSite = function(site){
-      // self.map.setCenter(site.location);
-      console.log(site.name);
+      map.setCenter(site.location);
     };
-
 };
 
-
+// the object properties of which are used in
+// initMap() call back
 var initializer = {
   init: function(object){
     // set the mapsObject property
@@ -49,10 +47,10 @@ var initializer = {
   },
   // Create a marker for each location given data from
   // Knockout observableArray data
-  makeMakers: function(knockout){
+  makeMakers: function(knockout, map){
     // Create a marker for each location
     var initializerObject = this;
-    map = this.mapMaker();
+    // map = this.mapMaker();
     knockout.sites().forEach(function(site){
        var infoWindow = initializerObject.mapsObject.makeInfoWindow(site.name);
        var marker = initializerObject.mapsObject.makeMaker(site.location, map);
@@ -63,15 +61,6 @@ var initializer = {
     })//-- end of forEach function
   }//-- end of markerMaker property
 };
-
-// make a Knockout view model object
-var controller = new ViewModel()
-
-// populate the sites observableArray
-controller.populateSites();
-
-//initiate Knockout on page load
-ko.applyBindings(controller);
 
 
 // callback for googlemaps JS api
@@ -104,5 +93,22 @@ function initMap(){
 
   //draw maps and markers
   initializer.init(googleMapsObject);
-  initializer.makeMakers(controller);
+  var map = initializer.mapMaker();
+
+//--------------------
+  // make a Knockout view model object
+  var controller = new ViewModel(map);
+
+  // populate the sites observableArray
+  controller.populateSites();
+
+  //initiate Knockout on page load
+  ko.applyBindings(controller);
+//--------------------
+
+  // zoomPoint.push(map);
+  initializer.makeMakers(controller, map);
+
 };
+
+// console.log(zoomPoint);
