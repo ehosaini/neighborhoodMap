@@ -5,13 +5,13 @@ var mapCenter = {
       zoom: 12
   };
 
-
 // site constructor function
 function Site(site, marker, infoWindow){
     this.name = site.name;
     this.location = site.location;
     this.siteMarker = marker;
     this.siteInfoWindow = infoWindow;
+    this.visible = ko.observable(true);
   };
 
 // Knockout view model object
@@ -34,11 +34,27 @@ function ViewModel(map, marker, infoWindow){
       map.setZoom(16);
       var siteMarker = site.siteMarker(site.location, map);
       var siteInfoWindow = site.siteInfoWindow(site.name);
-      // siteInfoWindow.setPosition(site.location);
       siteInfoWindow.open(map, siteMarker);
-      // console.log(siteInfoWindow);
     };
-};
+
+  // filter a selected item and update the list
+  self.filterSite = function(site){
+    self.zoomOnSite(site);
+    self.sites().forEach(function(siteItem){
+      if(siteItem.name != site.name){siteItem.visible(false)}
+      else{siteItem.visible(true)};
+    });//-- end of forEach function
+  };
+
+  // show all sites
+  self.showAllSites = function(){
+    self.sites().forEach(function(site){
+      site.visible(true);
+    });//-- end of forEach function
+    map.setZoom(12);
+  };
+
+};//-- end of ViewModel
 
 // the object properties of which are used in
 // initMap() call back
@@ -56,7 +72,6 @@ var initializer = {
   // Create a marker for each location given data from
   // Knockout observableArray data
   makeMakers: function(knockout, map){
-
     var initializerObject = this;
     // Create a marker for each location in Konckout observableArray
     knockout.sites().forEach(function(site){
@@ -73,7 +88,6 @@ var initializer = {
 
 // callback for googlemaps JS api
 function initMap(){
-
   // google maps object constructors
   var googleMapsObject = {
     makeMap: function(){
@@ -146,4 +160,4 @@ function initMap(){
 
   // load initial map and set markers
   initializer.makeMakers(controller, map);
-};
+};//-- end of initMap callback
