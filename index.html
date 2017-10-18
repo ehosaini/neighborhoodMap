@@ -22,7 +22,7 @@
 
     <div class="container-fluid">
       <div class="row justify-content-center h-100">
-          <!-- search bar and locations list on the left side -->
+          <!-- filter dropdown on the left side -->
           <div class="col col-3">
             <form class="form-inline">
               <div class="form-group">
@@ -36,18 +36,16 @@
                 </div>
               </div>
             </form>
-
+            <!-- locations list the left side -->
             <ul class="list-group" data-bind="foreach: sites">
                 <li class="placesList list-group-item-action"
                 data-bind="text: name, click: $parent.zoomOnSite, visible: visible()"></li>
             </ul>
-
           </div>
 
-          <!-- Google map on the right side  -->
+          <!-- Google map and foursquare respose on the right side  -->
           <div class="col col-9" id="map"></div>
-
-
+          <div class="col col-9" id="foursquare"></div>
       </div>
     </div>
 
@@ -64,9 +62,5 @@
     <script src="js/script.js"></script>
     <script src="js/mvvm.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIZOOrwEvY10hGaO4WydV6Zdih7yBfWNk&callback=initMap" async defer></script>
-
-
-
-
   </body>
 </html>

@@ -1,8 +1,8 @@
 
 // maps center on page load
 var mapCenter = {
-      center: {lat: 38.8718568, lng: -77.0562669},
-      zoom: 12
+      center: {lat: 38.9096936, lng: -77.043339},
+      zoom: 14
   };
 
 // site constructor function
@@ -51,7 +51,7 @@ function ViewModel(map, marker, infoWindow){
     self.sites().forEach(function(site){
       site.visible(true);
     });//-- end of forEach function
-    map.setZoom(12);
+    map.setZoom(14);
   };
 
 };//-- end of ViewModel
