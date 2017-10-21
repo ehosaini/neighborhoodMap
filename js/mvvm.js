@@ -13,7 +13,7 @@ function Site(site, marker, infoWindow){
     this.siteMarker = marker;
     this.siteInfoWindow = infoWindow;
     this.visible = ko.observable(true);
-  };
+  }
 
 // Knockout view model object
 function ViewModel(map, marker, infoWindow){
@@ -58,18 +58,18 @@ function ViewModel(map, marker, infoWindow){
                  $("#venueName").html(foursquareData.venueName);
                  $("#venueAddress").html(address[0] + ", " + address[1], + address [2]);
 
-                 if(foursquareData.url != undefined){
+                 if(foursquareData.url !== undefined){
                    $("#url").css("display", "block");
                    $("#url").html("Website");
                    $("#url").attr({
                      href: foursquareData.url,
                      target: "_blank"
                    });
-                 };// end of if
+                 }// end of if
 
                 }).fail(function(err) {
-                  var errorMessage = "Sorry foursquare couldn't find a match :("
-                  $("#venueName").html(foursquareData.venueName);
+                  var errorMessage = "Sorry foursquare couldn't find a match :(";
+                  $("#venueName").html(errorMessage);
                 });
       });//-- end of addListener
     };
@@ -81,8 +81,12 @@ function ViewModel(map, marker, infoWindow){
     $("#venueName, #venueAddress, #url").html("");
     self.zoomOnSite(site);
     self.sites().forEach(function(siteItem){
-      if(siteItem.name != site.name){siteItem.visible(false)}
-      else{siteItem.visible(true)};
+      if(siteItem.name != site.name){
+        siteItem.visible(false);
+      }
+      else{
+        siteItem.visible(true);
+      }
     });//-- end of forEach function
   };
 
@@ -96,7 +100,7 @@ function ViewModel(map, marker, infoWindow){
     map.setCenter(mapCenter.center);
   };
 
-};//-- end of ViewModel
+}//-- end of ViewModel
 
 // the object properties of which are used in
 // initMap() call back
@@ -140,21 +144,21 @@ var initializer = {
                   $("#venueName").html(foursquareData.venueName);
                   $("#venueAddress").html(address[0] + ", " + address[1], + address [2]);
 
-                  if(foursquareData.url != undefined){
+                  if(foursquareData.url !== undefined){
                     $("#url").css("display", "block");
                     $("#url").html("Website");
                     $("#url").attr({
                       href: foursquareData.url,
                       target: "_blank"
                     });
-                  };// end of if
+                  }// end of if
 
                  }).fail(function(err) {
-                   var errorMessage = "Sorry foursquare couldn't find a match :("
-                   $("#venueName").html(foursquareData.venueName);
+                   var errorMessage = "Sorry foursquare couldn't find a match :(";
+                   $("#venueName").html(errorMessage);
                  });
        });//-- end of addListener
-    })//-- end of forEach function
+    });//-- end of forEach function
   }//-- end of markerMaker property
 };
 
@@ -185,7 +189,7 @@ function initMap(){
           map: map,
         });
         return marker;
-      };//-- end of inner function
+      }//-- end of inner function
       return returnMarker;
     },
 
@@ -205,7 +209,7 @@ function initMap(){
           content: content
         });//-- end of inner function
         return infoWindow;
-      };
+      }
 
       return returnInfoWindow;
     }
@@ -234,4 +238,4 @@ function initMap(){
 
   // load initial map and set markers
   initializer.makeMakers(controller, map);
-};//-- end of initMap callback
+}//-- end of initMap callback
