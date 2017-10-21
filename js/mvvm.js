@@ -9,6 +9,7 @@ var mapCenter = {
 function Site(site, marker, infoWindow){
     this.name = site.name;
     this.location = site.location;
+    this.ajaxUrl = site.ajaxUrl;
     this.siteMarker = marker;
     this.siteInfoWindow = infoWindow;
     this.visible = ko.observable(true);
@@ -28,17 +29,56 @@ function ViewModel(map, marker, infoWindow){
     };
 
   // center the map on the marker of location that user click on it's name
-  //on the list and open the infowindow
+  // on the list and open the infowindow
     self.zoomOnSite = function(site){
       map.setCenter(site.location);
       map.setZoom(16);
+      // clear related DOM contents prior to making Ajax call
+      $("#venueName, #venueAddress, #url").html("");
+
       var siteMarker = site.siteMarker(site.location, map);
       var siteInfoWindow = site.siteInfoWindow(site.name);
       siteInfoWindow.open(map, siteMarker);
+      siteMarker.addListener('click', function(){
+
+        // make Ajax call to foursquare api
+          $.ajax({
+                url: site.ajaxUrl,
+                method: 'GET',
+                dataType : "json",
+                }).done(function(result) {
+                  var data = result.response.venues;
+                  foursquareData = {};
+                  foursquareData.venueName = data[0].name;
+                  foursquareData.venueAddress = data[0].location.formattedAddress;
+                  foursquareData.category = data[0].categories[0].name;
+                  foursquareData.url = data[0].url;
+
+                 var address = foursquareData.venueAddress;
+                 $("#venueName").html(foursquareData.venueName);
+                 $("#venueAddress").html(address[0] + ", " + address[1], + address [2]);
+
+                 if(foursquareData.url != undefined){
+                   $("#url").css("display", "block");
+                   $("#url").html("Website");
+                   $("#url").attr({
+                     href: foursquareData.url,
+                     target: "_blank"
+                   });
+                 };// end of if
+
+                }).fail(function(err) {
+                  var errorMessage = "Sorry foursquare couldn't find a match :("
+                  $("#venueName").html(foursquareData.venueName);
+                });
+      });//-- end of addListener
     };
 
-  // filter a selected item and update the list
+  // filter a selected item and update the list when a site is selected
+  // via the filter dropdown in the view
   self.filterSite = function(site){
+    // clear related DOM contents prior to zooming on a different site marker
+    $("#venueName, #venueAddress, #url").html("");
     self.zoomOnSite(site);
     self.sites().forEach(function(siteItem){
       if(siteItem.name != site.name){siteItem.visible(false)}
@@ -46,12 +86,14 @@ function ViewModel(map, marker, infoWindow){
     });//-- end of forEach function
   };
 
-  // show all sites
+  // show all sites when the related button in the view is clicked on
   self.showAllSites = function(){
+    $("#venueName, #venueAddress, #url").html("");
     self.sites().forEach(function(site){
       site.visible(true);
     });//-- end of forEach function
     map.setZoom(14);
+    map.setCenter(mapCenter.center);
   };
 
 };//-- end of ViewModel
@@ -80,15 +122,47 @@ var initializer = {
        // open info window when user clicks on a marker
        marker.addListener('click', function(){
          infoWindow.open(map, marker);
-        });
+
+         // make Ajax call to foursquare api
+           $.ajax({
+                 url: site.ajaxUrl,
+                 method: 'GET',
+                 dataType : "json",
+                 }).done(function(result) {
+                   var data = result.response.venues;
+                   foursquareData = {};
+                   foursquareData.venueName = data[0].name;
+                   foursquareData.venueAddress = data[0].location.formattedAddress;
+                   foursquareData.category = data[0].categories[0].name;
+                   foursquareData.url = data[0].url;
+
+                  var address = foursquareData.venueAddress;
+                  $("#venueName").html(foursquareData.venueName);
+                  $("#venueAddress").html(address[0] + ", " + address[1], + address [2]);
+
+                  if(foursquareData.url != undefined){
+                    $("#url").css("display", "block");
+                    $("#url").html("Website");
+                    $("#url").attr({
+                      href: foursquareData.url,
+                      target: "_blank"
+                    });
+                  };// end of if
+
+                 }).fail(function(err) {
+                   var errorMessage = "Sorry foursquare couldn't find a match :("
+                   $("#venueName").html(foursquareData.venueName);
+                 });
+       });//-- end of addListener
     })//-- end of forEach function
   }//-- end of markerMaker property
 };
 
 
-// callback for googlemaps JS api
+//------------------------ callback for googlemaps JS api ---------------------
 function initMap(){
-  // google maps object constructors
+
+  // google maps objects constructor
   var googleMapsObject = {
     makeMap: function(){
       // Create a map object and specify the DOM element for display.
@@ -99,7 +173,7 @@ function initMap(){
     makeMaker: function(site,map) {
       var marker = new google.maps.Marker({
         position: site,
-        map: map,
+        map: map
       });
       return marker;
     },
@@ -147,7 +221,7 @@ function initMap(){
   var infoWindow = googleMapsObject.returnInfoWindow();
 
 
-//-------------------- initilize and bind Knokout view model --------------
+//-------------------- initilize and bind Knockout view model --------------
   // make a Knockout view model object
   var controller = new ViewModel(map, marker, infoWindow);
 
@@ -156,7 +230,7 @@ function initMap(){
 
   //initiate Knockout on page load
   ko.applyBindings(controller);
-//--------------------
+//-----------------------------------------------------------------------------
 
   // load initial map and set markers
   initializer.makeMakers(controller, map);

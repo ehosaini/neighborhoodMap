@@ -5,3 +5,7 @@ html, body, .container-fluid {
 .placesList {
   list-style-type: none;
 }
+
+#url {
+  display: none;
+}
