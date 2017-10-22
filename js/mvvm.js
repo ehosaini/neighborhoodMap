@@ -9,6 +9,7 @@ var mapCenter = {
 function Site(site, marker, infoWindow){
     this.name = site.name;
     this.location = site.location;
+    this.category = site.category;
     this.ajaxUrl = site.ajaxUrl;
     this.siteMarker = marker;
     this.siteInfoWindow = infoWindow;
@@ -18,14 +19,33 @@ function Site(site, marker, infoWindow){
 // Knockout view model object
 function ViewModel(map, marker, infoWindow){
   // populate the sites observableArray upon page load
-    self = this;
-    self.sites = ko.observableArray([]),
+    var self = this;
 
+    // site data for populating list and markers
+    self.sites = ko.observableArray([]);
+
+    // select unique categories for stored sites
+    self.findCategories = function findCategories(){
+                        var sitesObject = self.sites();
+                        var flags = [], output = [], l = sitesObject.length, i ;
+                        for(i=0; i<l; i++){
+                          if(flags[sitesObject[i].category]) continue;
+                          flags[sitesObject[i].category] = true;
+                          output.push(sitesObject[i].category);
+                        };
+                        return output;
+                      };
+    // category types used in the filter feature
+    self.siteCategories = ko.observableArray([]);// end of siteCategories
+
+    // populates the sites & siteCategories observableArrays on page load
     self.populateSites = function(){
-      // var theViewModelObj = this;
       defaultLocations.forEach(function(site){
         self.sites.push(new Site(site, marker, infoWindow));
       });//-- end of forEach
+      self.findCategories().forEach(function(category){
+        self.siteCategories.push(category);
+      });// end of forEach
     };
 
   // center the map on the marker of location that user click on it's name
@@ -76,15 +96,15 @@ function ViewModel(map, marker, infoWindow){
 
   // filter a selected item and update the list when a site is selected
   // via the filter dropdown in the view
-  self.filterSite = function(site){
+  self.filterSite = function(category){
     // clear related DOM contents prior to zooming on a different site marker
     $("#venueName, #venueAddress, #url").html("");
-    self.zoomOnSite(site);
+
     self.sites().forEach(function(siteItem){
-      if(siteItem.name != site.name){
+      if(siteItem.category != category){
         siteItem.visible(false);
       }
-      else{
+      else {
         siteItem.visible(true);
       }
     });//-- end of forEach function
@@ -215,7 +235,6 @@ function initMap(){
     }
   };
 
-
   //draw maps and markers
   initializer.init(googleMapsObject);
 
@@ -225,7 +244,7 @@ function initMap(){
   var infoWindow = googleMapsObject.returnInfoWindow();
 
 
-//-------------------- initilize and bind Knockout view model --------------
+//-------------------- initilize and bind Knockout view model on page load ----
   // make a Knockout view model object
   var controller = new ViewModel(map, marker, infoWindow);
 
