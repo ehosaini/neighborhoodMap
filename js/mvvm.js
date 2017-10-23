@@ -6,13 +6,13 @@ var mapCenter = {
   };
 
 // site constructor function
-function Site(site, marker, infoWindow){
+function Site(site){
     this.name = site.name;
     this.location = site.location;
     this.category = site.category;
     this.ajaxUrl = site.ajaxUrl;
-    this.siteMarker = marker;
-    this.siteInfoWindow = infoWindow;
+    this.siteMarker = "";
+    this.siteInfoWindow = "";
     this.visible = ko.observable(true);
   }
 
@@ -84,7 +84,7 @@ function ViewModel(map, marker, infoWindow){
     };
 
   // center the map on the marker of location that user click on it's name
-  // on the list and open the infowindow
+  // an animate the marker, and make ajax call to Foursquare API
     self.zoomOnSite = function(site){
       map.setCenter(site.location);
       map.setZoom(16);
@@ -92,11 +92,14 @@ function ViewModel(map, marker, infoWindow){
       // clear related DOM contents prior to making Ajax call
       $("#venueName, #venueAddress, #url").html("");
 
-      var siteMarker = site.siteMarker(site.location, map);
-      // animate site marker when the name is clicked on
-      siteMarker.setAnimation(google.maps.Animation.BOUNCE);
-      siteMarker.addListener('click', toggleBounce);
+      // make marker bounce when user clicks on a site name
+      // on the list, and stop bounce when clicks again
+      var marker = site.siteMarker;
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      marker.addListener('click', toggleBounce);
+
       function toggleBounce() {
+        sit.esiteInfoWindow.open(map, marker);
           if (siteMarker.getAnimation() !== null) {
             siteMarker.setAnimation(null);
           } else {
@@ -104,9 +107,6 @@ function ViewModel(map, marker, infoWindow){
           }
         };
 
-
-      var siteInfoWindow = site.siteInfoWindow(site.name);
-      siteInfoWindow.open(map, siteMarker);
       self.makeAjaxCall(site);
 
     };
@@ -160,15 +160,19 @@ var initializer = {
     knockout.sites().forEach(function(site){
        var infoWindow = initializerObject.mapsObject.makeInfoWindow(site.name);
        var marker = initializerObject.mapsObject.makeMaker(site.location, map);
-       // open info window when user clicks on a marker
+       site.siteMarker = marker;
+       site.siteInfoWindow = infoWindow;
+       // animate marker and open info window when user clicks on a marker
+       // and make ajax call to fourSquare api
        marker.addListener('click', function(){
-         infoWindow.open(map, marker);
          // animate marker when clicked on
          if (marker.getAnimation() !== null) {
               marker.setAnimation(null);
             } else {
               marker.setAnimation(google.maps.Animation.BOUNCE);
             };
+          // open infoWindow
+          infoWindow.open(map, marker);
 
          // make Ajax call to foursquare api
            $.ajax({
@@ -265,13 +269,13 @@ function initMap(){
 
   // objects passed into Knockout viewmodel
   var map = initializer.mapMaker();
-  var marker =  googleMapsObject.returnMarker();
-  var infoWindow = googleMapsObject.returnInfoWindow();
+  // var marker =  googleMapsObject.returnMarker();
+  // var infoWindow = googleMapsObject.returnInfoWindow();
 
 
 //-------------------- initilize and bind Knockout view model on page load ----
   // make a Knockout view model object
-  var controller = new ViewModel(map, marker, infoWindow);
+  var controller = new ViewModel(map);
 
   // populate the sites observableArray
   controller.populateSites();
