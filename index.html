@@ -27,19 +27,19 @@
             <form class="form-inline">
               <div class="form-group">
                 <div class="dropdown">
+                  <button class="btn btn-default" data-bind="click: showAllSites">Show All</button>
                   <button class="btn btn-primary dropdown-toggle fa fa-filter fa-lg" aria-hidden="true" type="button" id="filterLocations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter
                   </button>
                   <div class="dropdown-menu" aria-labeledby="filterLocations" data-bind="foreach: siteCategories">
                     <a class="dropdown-item" href="#" data-bind="text: $data, click: $parent.filterSite"></a>
                   </div>
-                  <button class="btn btn-default" data-bind="click: showAllSites">Show All</button>
                 </div>
               </div>
             </form>
             <!-- locations list the left side -->
             <ul class="list-group" data-bind="foreach: sites">
                 <li class="placesList list-group-item-action"
-                data-bind="text: name, click: $parent.zoomOnSite, visible: visible()"></li>
+                data-bind="text: name, click: $parent.zoomOnSite, $parent.makeAjaxCall, visible: visible()"></li>
             </ul>
           </div>
 

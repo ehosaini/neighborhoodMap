@@ -24,6 +24,10 @@ function ViewModel(map, marker, infoWindow){
     // site data for populating list and markers
     self.sites = ko.observableArray([]);
 
+
+    // category types used in the filter feature
+    self.siteCategories = ko.observableArray([]);// end of siteCategories
+
     // select unique categories for stored sites
     self.findCategories = function findCategories(){
                         var sitesObject = self.sites();
@@ -35,8 +39,6 @@ function ViewModel(map, marker, infoWindow){
                         };
                         return output;
                       };
-    // category types used in the filter feature
-    self.siteCategories = ko.observableArray([]);// end of siteCategories
 
     // populates the sites & siteCategories observableArrays on page load
     self.populateSites = function(){
@@ -48,50 +50,65 @@ function ViewModel(map, marker, infoWindow){
       });// end of forEach
     };
 
+    // make ajax call to Foursquare api
+    self.makeAjaxCall = function(site){
+      $.ajax({
+            url: site.ajaxUrl,
+            method: 'GET',
+            dataType : "json",
+            }).done(function(result) {
+              var data = result.response.venues;
+              foursquareData = {};
+              foursquareData.venueName = data[0].name;
+              foursquareData.venueAddress = data[0].location.formattedAddress;
+              foursquareData.category = data[0].categories[0].name;
+              foursquareData.url = data[0].url;
+
+             var address = foursquareData.venueAddress;
+             $("#venueName").html(foursquareData.venueName);
+             $("#venueAddress").html(address[0] + ", " + address[1], + address [2]);
+
+             if(foursquareData.url !== undefined){
+               $("#url").css("display", "block");
+               $("#url").html("Website");
+               $("#url").attr({
+                 href: foursquareData.url,
+                 target: "_blank"
+               });
+             }// end of if
+
+            }).fail(function(err) {
+              var errorMessage = "Sorry foursquare couldn't find a match :(";
+              $("#venueName").html(errorMessage);
+            });
+    };
+
   // center the map on the marker of location that user click on it's name
   // on the list and open the infowindow
     self.zoomOnSite = function(site){
       map.setCenter(site.location);
       map.setZoom(16);
+
       // clear related DOM contents prior to making Ajax call
       $("#venueName, #venueAddress, #url").html("");
 
       var siteMarker = site.siteMarker(site.location, map);
+      // animate site marker when the name is clicked on
+      siteMarker.setAnimation(google.maps.Animation.BOUNCE);
+      siteMarker.addListener('click', toggleBounce);
+      function toggleBounce() {
+          if (siteMarker.getAnimation() !== null) {
+            siteMarker.setAnimation(null);
+          } else {
+            siteMarker.setAnimation(google.maps.Animation.BOUNCE);
+          }
+        };
+
+
       var siteInfoWindow = site.siteInfoWindow(site.name);
       siteInfoWindow.open(map, siteMarker);
-      siteMarker.addListener('click', function(){
+      self.makeAjaxCall(site);
 
-        // make Ajax call to foursquare api
-          $.ajax({
-                url: site.ajaxUrl,
-                method: 'GET',
-                dataType : "json",
-                }).done(function(result) {
-                  var data = result.response.venues;
-                  foursquareData = {};
-                  foursquareData.venueName = data[0].name;
-                  foursquareData.venueAddress = data[0].location.formattedAddress;
-                  foursquareData.category = data[0].categories[0].name;
-                  foursquareData.url = data[0].url;
-
-                 var address = foursquareData.venueAddress;
-                 $("#venueName").html(foursquareData.venueName);
-                 $("#venueAddress").html(address[0] + ", " + address[1], + address [2]);
-
-                 if(foursquareData.url !== undefined){
-                   $("#url").css("display", "block");
-                   $("#url").html("Website");
-                   $("#url").attr({
-                     href: foursquareData.url,
-                     target: "_blank"
-                   });
-                 }// end of if
-
-                }).fail(function(err) {
-                  var errorMessage = "Sorry foursquare couldn't find a match :(";
-                  $("#venueName").html(errorMessage);
-                });
-      });//-- end of addListener
     };
 
   // filter a selected item and update the list when a site is selected
@@ -146,6 +163,12 @@ var initializer = {
        // open info window when user clicks on a marker
        marker.addListener('click', function(){
          infoWindow.open(map, marker);
+         // animate marker when clicked on
+         if (marker.getAnimation() !== null) {
+              marker.setAnimation(null);
+            } else {
+              marker.setAnimation(google.maps.Animation.BOUNCE);
+            };
 
          // make Ajax call to foursquare api
            $.ajax({
@@ -202,6 +225,8 @@ function initMap(){
       return marker;
     },
 
+    // returned value used in Site constructor which stores the value
+    // in the Knockout observableArray
     returnMarker: function(){
       function returnMarker(site, map){
         var marker = new google.maps.Marker({
