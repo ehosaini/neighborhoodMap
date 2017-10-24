@@ -67,7 +67,9 @@
     <script src="js/jqueryStyle.js"></script>
     <script src="js/script.js"></script>
     <script src="js/mvvm.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIZOOrwEvY10hGaO4WydV6Zdih7yBfWNk&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIZOOrwEvY10hGaO4WydV6Zdih7yBfWNk&callback=initMap" async defer onerror=googleError
+      googleError=function(){$("#map").html("Sorry we couldn't load the map, try again!")}
+    ></script>
 
   </body>
 </html>

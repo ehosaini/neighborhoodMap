@@ -5,7 +5,7 @@ var mapCenter = {
       zoom: 14
   };
 
-// site constructor function
+// site constructor function that populates Konckout observableArray
 function Site(site){
     this.name = site.name;
     this.location = site.location;
@@ -17,8 +17,7 @@ function Site(site){
   }
 
 // Knockout view model object
-function ViewModel(map, marker, infoWindow){
-  // populate the sites observableArray upon page load
+function ViewModel(map){
     var self = this;
 
     // site data for populating list and markers
@@ -36,14 +35,14 @@ function ViewModel(map, marker, infoWindow){
                           if(flags[sitesObject[i].category]) continue;
                           flags[sitesObject[i].category] = true;
                           output.push(sitesObject[i].category);
-                        };
+                        }
                         return output;
                       };
 
     // populates the sites & siteCategories observableArrays on page load
     self.populateSites = function(){
       defaultLocations.forEach(function(site){
-        self.sites.push(new Site(site, marker, infoWindow));
+        self.sites.push(new Site(site));
       });//-- end of forEach
       self.findCategories().forEach(function(category){
         self.siteCategories.push(category);
@@ -65,9 +64,10 @@ function ViewModel(map, marker, infoWindow){
               foursquareData.url = data[0].url;
 
              var address = foursquareData.venueAddress;
+             // alter DOM element html with data recieved from ajax call
              $("#venueName").html(foursquareData.venueName);
              $("#venueAddress").html(address[0] + ", " + address[1], + address [2]);
-
+             // show url if ajax response has url link
              if(foursquareData.url !== undefined){
                $("#url").css("display", "block");
                $("#url").html("Website");
@@ -92,12 +92,11 @@ function ViewModel(map, marker, infoWindow){
       // clear related DOM contents prior to making Ajax call
       $("#venueName, #venueAddress, #url").html("");
 
-      // make marker bounce when user clicks on a site name
-      // on the list, and stop bounce when clicks again
+      // make marker bounce when user clicks on a site name on the list
       var marker = site.siteMarker;
       marker.setAnimation(google.maps.Animation.BOUNCE);
       marker.addListener('click', toggleBounce);
-
+      // toggle bounce when user clicks on the marker
       function toggleBounce() {
         sit.esiteInfoWindow.open(map, marker);
           if (siteMarker.getAnimation() !== null) {
@@ -105,16 +104,16 @@ function ViewModel(map, marker, infoWindow){
           } else {
             siteMarker.setAnimation(google.maps.Animation.BOUNCE);
           }
-        };
-
+        }
       self.makeAjaxCall(site);
-
     };
 
-  // filter a selected item and update the list when a site is selected
-  // via the filter dropdown in the view
+  // filter sites based on category they belong to via the filter dropdown
+  // in the view
   self.filterSite = function(category){
     // clear related DOM contents prior to zooming on a different site marker
+    // this make sures the wrong content won't be displayed if ajax response
+    // returned for a site contains blank fields
     $("#venueName, #venueAddress, #url").html("");
 
     self.sites().forEach(function(siteItem){
@@ -139,7 +138,7 @@ function ViewModel(map, marker, infoWindow){
 
 }//-- end of ViewModel
 
-// the object properties of which are used in
+// initializer object properties of which are used in
 // initMap() call back
 var initializer = {
   init: function(object){
@@ -170,7 +169,7 @@ var initializer = {
               marker.setAnimation(null);
             } else {
               marker.setAnimation(google.maps.Animation.BOUNCE);
-            };
+            }
           // open infoWindow
           infoWindow.open(map, marker);
 
@@ -269,8 +268,6 @@ function initMap(){
 
   // objects passed into Knockout viewmodel
   var map = initializer.mapMaker();
-  // var marker =  googleMapsObject.returnMarker();
-  // var infoWindow = googleMapsObject.returnInfoWindow();
 
 
 //-------------------- initilize and bind Knockout view model on page load ----

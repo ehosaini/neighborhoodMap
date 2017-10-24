@@ -1,7 +1,7 @@
 
 // locations data
 var defaultLocations = [
-  { name:"Dolcezza Gelato Dupont",
+  { name:"Dolcezza Gelato",
     category: "coffee shop",
     location: {lat: 38.91419768029149, lng: -77.04425211970849}
   },
@@ -42,6 +42,6 @@ defaultLocations.forEach(function(loc){
       'client_secret': 'HNBCAFDWFSCPX1JKXQPA333V5TCYIVES1OEIJBEPKHLKIBT4'
           });
     return url;
-  };
+  }
   loc.ajaxUrl = urlBuilder();
 });//--end of foreach
