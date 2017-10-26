@@ -1,75 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <title>Neighborhood</title>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- font awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <title>Neighborhood</title>
 
-    <!-- custom styling -->
-    <link rel="stylesheet" href="style/custom.css" />
-  </head>
-  <body>
-    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
-       <a class="navbar-brand" href="#">Washington DC Locations</a>
-    </nav>
+  <!-- font awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <div class="container-fluid">
-      <div class="row justify-content-center h-100">
-          <!-- filter dropdown on the left side -->
-          <div class="col col-sm-3">
-            <form class="form-inline">
-              <div class="form-group">
-                <div class="dropdown">
-                  <button class="btn btn-default" data-bind="click: showAllSites">Show All</button>
-                  <button class="btn btn-primary dropdown-toggle fa fa-filter fa-lg" aria-hidden="true" type="button" id="filterLocations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter
+  <!-- custom styling -->
+  <link rel="stylesheet" href="style/custom.css" />
+</head>
+
+<body>
+  <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+    <a class="navbar-brand" href="#">Washington DC Locations</a>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row justify-content-center h-100">
+      <!-- filter dropdown on the left side -->
+      <div class="col col-sm-3">
+        <form class="form-inline">
+          <div class="form-group">
+            <div class="dropdown">
+              <button class="btn btn-default" data-bind="click: showAllSites">Show All</button>
+              <button class="btn btn-primary dropdown-toggle fa fa-filter fa-lg" aria-hidden="true" type="button" id="filterLocations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter
                   </button>
-                  <div class="dropdown-menu" aria-labeledby="filterLocations" data-bind="foreach: siteCategories">
-                    <a class="dropdown-item" href="#" data-bind="text: $data, click: $parent.filterSite"></a>
-                  </div>
-                </div>
+              <div class="dropdown-menu" aria-labeledby="filterLocations" data-bind="foreach: siteCategories">
+                <a class="dropdown-item" href="#" data-bind="text: $data, click: $parent.filterSite"></a>
               </div>
-            </form>
-            <!-- locations list the left side -->
-            <ul class="list-group" data-bind="foreach: sites">
-                <li class="placesList list-group-item-action"
-                data-bind="text: name, click: $parent.zoomOnSite, $parent.makeAjaxCall, visible: visible()"></li>
-            </ul>
+            </div>
           </div>
+        </form>
+        <!-- locations list the left side -->
+        <ul class="list-group" data-bind="foreach: sites">
+          <li class="placesList list-group-item-action" data-bind="text: name, click: $parent.zoomOnSite, $parent.makeAjaxCall, visible: visible()"></li>
+        </ul>
+      </div>
 
-          <!-- google map and foursquare data on the right side -->
+      <!-- google map and foursquare data on the right side -->
 
-          <div class="col col-sm-9" id="map"></div>
-          <div class="col col-9 align-self-center offset-3" id="foursquare">
-            <h5 id="venueName"></h5>
-            <p id="venueAddress"></p>
-            <a id="url"></a>
-          </div>
+      <div class="col col-sm-9" id="map"></div>
+      <div class="col col-9 align-self-center offset-3" id="foursquare">
+        <h5 id="venueName"></h5>
+        <p id="venueAddress"></p>
+        <a id="url"></a>
       </div>
     </div>
+  </div>
 
-    <!-- jQuery first, then Tether, then Bootstrap JS. -->
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- jQuery first, then Tether, then Bootstrap JS. -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <!-- Knockoutjs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+  <!-- Knockoutjs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
 
-    <!-- script files and Google Js API -->
-    <script src="js/jqueryStyle.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/mvvm.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIZOOrwEvY10hGaO4WydV6Zdih7yBfWNk&callback=initMap" async defer onerror=googleError
-      googleError=function(){$("#map").html("Sorry we couldn't load the map, try again!")}
-    ></script>
+  <!-- script files and Google Js API -->
+  <script src="js/jqueryStyle.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/mvvm.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIZOOrwEvY10hGaO4WydV6Zdih7yBfWNk&callback=initMap" async defer onerror="googleError()" }></script>
 
-  </body>
+</body>
+
 </html>
