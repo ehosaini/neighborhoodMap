@@ -60,6 +60,7 @@ var initializer = {
   makeMakers: function(knockout, map) {
     var initializerObject = this;
     // Create a marker for each location in Konckout observableArray
+    var mvvmOjbect = knockout;
     knockout.sites().forEach(function(site) {
       var infoWindow = initializerObject.mapsObject.makeInfoWindow(site.name);
       var marker = initializerObject.mapsObject.makeMaker(site.location, map);
@@ -78,35 +79,8 @@ var initializer = {
         infoWindow.open(map, marker);
 
         // make Ajax call to foursquare api
-        $.ajax({
-          url: site.ajaxUrl,
-          method: 'GET',
-          dataType: "json",
-        }).done(function(result) {
-          var data = result.response.venues;
-          foursquareData = {};
-          foursquareData.venueName = data[0].name;
-          foursquareData.venueAddress = data[0].location.formattedAddress;
-          foursquareData.category = data[0].categories[0].name;
-          foursquareData.url = data[0].url;
-
-          var address = foursquareData.venueAddress;
-          $("#venueName").html(foursquareData.venueName);
-          $("#venueAddress").html(address[0] + ", " + address[1], +address[2]);
-
-          if (foursquareData.url !== undefined) {
-            $("#url").css("display", "block");
-            $("#url").html("Website");
-            $("#url").attr({
-              href: foursquareData.url,
-              target: "_blank"
-            });
-          } // end of if
-
-        }).fail(function(err) {
-          var errorMessage = "Sorry foursquare couldn't find a match :(";
-          $("#venueName").html(errorMessage);
-        });
+        mvvmOjbect.makeAjaxCall(site);
+        
       }); //-- end of addListener
     }); //-- end of forEach function
   } //-- end of markerMaker property

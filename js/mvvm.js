@@ -9,6 +9,9 @@ function ViewModel(map) {
   // category types used in the filter feature
   self.siteCategories = ko.observableArray([]); // end of siteCategories
 
+  // Ko Observable for storing data returned by Ajax calls
+  self.ajaxData = ko.observable();
+
   // select unique categories for stored sites
   self.findCategories = function findCategories() {
     var sitesObject = self.sites();
@@ -42,29 +45,10 @@ function ViewModel(map) {
       dataType: "json",
     }).done(function(result) {
       var data = result.response.venues;
-      foursquareData = {};
-      foursquareData.venueName = data[0].name;
-      foursquareData.venueAddress = data[0].location.formattedAddress;
-      foursquareData.category = data[0].categories[0].name;
-      foursquareData.url = data[0].url;
-
-      var address = foursquareData.venueAddress;
-      // alter DOM element html with data recieved from ajax call
-      $("#venueName").html(foursquareData.venueName);
-      $("#venueAddress").html(address[0] + ", " + address[1], +address[2]);
-      // show url if ajax response has url link
-      if (foursquareData.url !== undefined) {
-        $("#url").css("display", "block");
-        $("#url").html("Website");
-        $("#url").attr({
-          href: foursquareData.url,
-          target: "_blank"
-        });
-      } // end of if
-
+      self.ajaxData(data[0]);
     }).fail(function(err) {
       var errorMessage = "Sorry foursquare couldn't find a match :(";
-      $("#venueName").html(errorMessage);
+      self.ajaxData(errorMessage);
     });
   };
 
@@ -83,7 +67,7 @@ function ViewModel(map) {
     marker.addListener('click', toggleBounce);
     // toggle bounce when user clicks on the marker
     function toggleBounce() {
-      sit.esiteInfoWindow.open(map, marker);
+      site.siteInfoWindow.open(map, marker);
       if (siteMarker.getAnimation() !== null) {
         siteMarker.setAnimation(null);
       } else {
