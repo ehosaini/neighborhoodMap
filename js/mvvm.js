@@ -34,7 +34,7 @@ function ViewModel(map) {
     }); //-- end of forEach
     self.findCategories().forEach(function(category) {
       self.siteCategories.push(category);
-    }); // end of forEach
+    }); //-- end of forEach
   };
 
   // make ajax call to Foursquare api
@@ -70,7 +70,9 @@ function ViewModel(map) {
     });
 
     // stop marker animation after 4 seconds
-    setTimeout(function(){marker.setAnimation(null)},2800);
+    setTimeout(function(){
+      marker.setAnimation(null);
+    },2800);
     self.makeAjaxCall(site);
   };
 
@@ -82,9 +84,18 @@ function ViewModel(map) {
     // returned for a site contains blank fields
     $("#venueName, #venueAddress, #url").html("");
 
+    // make all markers visible before filtering a new category
+    self.sites().forEach(function(siteItem){
+      siteItem.siteMarker.setVisible(true);
+    });
+
+    map.setZoom(12);
+
+    // make visible only the marker for selected category
     self.sites().forEach(function(siteItem) {
       if (siteItem.category != category) {
         siteItem.visible(false);
+        siteItem.siteMarker.setVisible(false);
       } else {
         siteItem.visible(true);
       }
@@ -96,6 +107,7 @@ function ViewModel(map) {
     $("#venueName, #venueAddress, #url").html("");
     self.sites().forEach(function(site) {
       site.visible(true);
+      site.siteMarker.setVisible(true);
     }); //-- end of forEach function
     map.setZoom(12);
     map.setCenter(mapCenter.center);

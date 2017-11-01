@@ -19,7 +19,7 @@ defaultLocations.forEach(function(loc) {
 
 // callback for the onerror attribute of google api
 function googleError() {
-  $("#map").html("Sorry we couldn't load the map, try again!")
+  $("#map").html("Sorry we couldn't load the map, try again!");
 }
 
 // maps center on page load
@@ -57,7 +57,7 @@ var initializer = {
   },
   // Create a marker for each location given data from
   // Knockout observableArray data
-  makeMakers: function(knockout, map) {
+  makeMarkers: function(knockout, map) {
     var initializerObject = this;
     // Create a marker for each location in Konckout observableArray
     var mvvmOjbect = knockout;
@@ -164,5 +164,5 @@ function initMap() {
   //-----------------------------------------------------------------------------
 
   // load initial map and set markers
-  initializer.makeMakers(controller, map);
+  initializer.makeMarkers(controller, map);
 } //-- end of initMap callback
