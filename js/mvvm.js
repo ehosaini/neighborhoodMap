@@ -64,16 +64,13 @@ function ViewModel(map) {
     // make marker bounce when user clicks on a site name on the list
     var marker = site.siteMarker;
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    marker.addListener('click', toggleBounce);
-    // toggle bounce when user clicks on the marker
-    function toggleBounce() {
+    marker.addListener('click', function(){
       site.siteInfoWindow.open(map, marker);
-      if (siteMarker.getAnimation() !== null) {
-        siteMarker.setAnimation(null);
-      } else {
-        siteMarker.setAnimation(google.maps.Animation.BOUNCE);
-      }
-    }
+      siteMarker.setAnimation(google.maps.Animation.BOUNCE);
+    });
+
+    // stop marker animation after 4 seconds
+    setTimeout(function(){marker.setAnimation(null)},2800);
     self.makeAjaxCall(site);
   };
 

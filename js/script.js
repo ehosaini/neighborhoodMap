@@ -66,22 +66,26 @@ var initializer = {
       var marker = initializerObject.mapsObject.makeMaker(site.location, map);
       site.siteMarker = marker;
       site.siteInfoWindow = infoWindow;
+
       // animate marker and open info window when user clicks on a marker
       // and make ajax call to fourSquare api
       marker.addListener('click', function() {
-        // animate marker when clicked on
-        if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
-        } else {
-          marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+
         // open infoWindow
         infoWindow.open(map, marker);
 
+        // stop marker animation and close window after 4 seconds
+        setTimeout(function(){
+          marker.setAnimation(null);
+          infoWindow.close();
+        },2800);
+
         // make Ajax call to foursquare api
         mvvmOjbect.makeAjaxCall(site);
-        
+
       }); //-- end of addListener
+
     }); //-- end of forEach function
   } //-- end of markerMaker property
 };
