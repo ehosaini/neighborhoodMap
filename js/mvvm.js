@@ -64,15 +64,15 @@ function ViewModel(map) {
     // make marker bounce when user clicks on a site name on the list
     var marker = site.siteMarker;
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    marker.addListener('click', function(){
+    marker.addListener('click', function() {
       site.siteInfoWindow.open(map, marker);
-      siteMarker.setAnimation(google.maps.Animation.BOUNCE);
+      marker.setAnimation(google.maps.Animation.BOUNCE);
     });
 
     // stop marker animation after 4 seconds
-    setTimeout(function(){
+    setTimeout(function() {
       marker.setAnimation(null);
-    },2800);
+    }, 2800);
     self.makeAjaxCall(site);
   };
 
@@ -85,7 +85,7 @@ function ViewModel(map) {
     $("#venueName, #venueAddress, #url").html("");
 
     // make all markers visible before filtering a new category
-    self.sites().forEach(function(siteItem){
+    self.sites().forEach(function(siteItem) {
       siteItem.siteMarker.setVisible(true);
     });
 
