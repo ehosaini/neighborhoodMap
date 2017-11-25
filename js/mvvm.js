@@ -82,7 +82,7 @@ function ViewModel(map) {
     // clear related DOM contents prior to zooming on a different site marker
     // this make sures the wrong content won't be displayed if ajax response
     // returned for a site contains blank fields
-    $("#venueName, #venueAddress, #url").html("");
+    self.ajaxData("");
 
     // make all markers visible before filtering a new category
     self.sites().forEach(function(siteItem) {
@@ -104,7 +104,7 @@ function ViewModel(map) {
 
   // show all sites when the related button in the view is clicked on
   self.showAllSites = function() {
-    $("#venueName, #venueAddress, #url").html("");
+    self.ajaxData("");
     self.sites().forEach(function(site) {
       site.visible(true);
       site.siteMarker.setVisible(true);
