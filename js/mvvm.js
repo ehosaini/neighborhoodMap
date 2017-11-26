@@ -62,7 +62,8 @@ function ViewModel(map) {
     map.setZoom(16);
 
     // clear related DOM contents prior to making Ajax call
-    $("#venueName, #venueAddress, #url").html("");
+    self.ajaxData("");
+    self.ajaxErrorMessage("");
 
     // make marker bounce when user clicks on a site name on the list
     var marker = site.siteMarker;
