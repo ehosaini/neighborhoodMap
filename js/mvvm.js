@@ -9,8 +9,11 @@ function ViewModel(map) {
   // category types used in the filter feature
   self.siteCategories = ko.observableArray([]); // end of siteCategories
 
-  // Ko Observable for storing data returned by Ajax calls
+  // Store data returned by Ajax calls
   self.ajaxData = ko.observable();
+
+  // Store error errorMessage
+  self.ajaxErrorMessage = ko.observable();
 
   // select unique categories for stored sites
   self.findCategories = function findCategories() {
@@ -48,7 +51,7 @@ function ViewModel(map) {
       self.ajaxData(data[0]);
     }).fail(function(err) {
       var errorMessage = "Sorry foursquare couldn't find a match :(";
-      self.ajaxData(errorMessage);
+      self.ajaxErrorMessage(errorMessage);
     });
   };
 
@@ -83,6 +86,7 @@ function ViewModel(map) {
     // this make sures the wrong content won't be displayed if ajax response
     // returned for a site contains blank fields
     self.ajaxData("");
+    self.ajaxErrorMessage("");
 
     // make all markers visible before filtering a new category
     self.sites().forEach(function(siteItem) {
@@ -105,6 +109,7 @@ function ViewModel(map) {
   // show all sites when the related button in the view is clicked on
   self.showAllSites = function() {
     self.ajaxData("");
+    self.ajaxErrorMessage("");
     self.sites().forEach(function(site) {
       site.visible(true);
       site.siteMarker.setVisible(true);

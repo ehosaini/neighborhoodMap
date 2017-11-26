@@ -76,10 +76,10 @@ var initializer = {
         infoWindow.open(map, marker);
 
         // stop marker animation and close window after 4 seconds
-        setTimeout(function(){
+        setTimeout(function() {
           marker.setAnimation(null);
           infoWindow.close();
-        },2800);
+        }, 2800);
 
         // make Ajax call to foursquare api
         mvvmOjbect.makeAjaxCall(site);

@@ -47,6 +47,9 @@
       <!-- google map and foursquare data on the right side -->
 
       <div class="col col-sm-9" id="map"></div>
+      <div class="col col-9 align-self-center offset-3">
+        <h5 class="text-warning" id="ajaxError" data-bind="text: ajaxErrorMessage"></h5>
+      </div>
       <div class="col col-9 align-self-center offset-3" id="foursquare" data-bind="with: ajaxData">
         <h5 id="venueName" data-bind="text: name"></h5>
         <p id="venueAddress" data-bind="text: location.formattedAddress"></p>
