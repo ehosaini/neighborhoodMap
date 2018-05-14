@@ -1,6 +1,8 @@
 ## Neighborhood App:
-This app allows users to find different locations on google maps.
+This is a single page application that displays some of the popular locations in Washington DC.
 The app pulls more data about each location from Foursquare api.
+
+## [See the App Live](https://portfolio-django.herokuapp.com/neighborhood)
 
 
 ## Run the app:
